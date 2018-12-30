@@ -1,46 +1,40 @@
-# Neural-Network-with-Financial-Time-Series-Data
-An evnet driven model that uses financial time series data with New York Times information to form a LSTM recurrent neural network.
-
-# Versions
-There are 3 models. The first 2 models are based on price and volume data alone. The third model is an event driven model that uses sentiment analysis on news data to predict the stock price. 
-
-1. Prediction with 22 previous days
-
-Filename: LSTM_Stock_prediction_20170507.ipynb
-
-Currently not working, but the model is optimized.
-
-2. Prediction with 22 previous days
-
-Filename: LSTM_Stock_prediction_20170528(Quandl).ipynb
-
-Using Quandl Database instead of pandas datareader. Not optimized.
-
-3. Event driven model with 3 previous days (Using CSV file for price data)
-
-Filename: Event_driven_LSTM_Stock_prediction.ipynb
-
-Using News for sentiment analysis for that day.
+<div align="center">
+  <img src="https://github.com/BenjiKCF/Neural-Network-with-Financial-Time-Series-Data/blob/master/Photos/Logo.png"><br><br>
+</div>
 
 
-# Future improvement:
-1. Optimize hyperparameter
-2. Technical indicator will be added to the features
-3. More data will be trained
-4. Quantopian Zipline will be used for backtesting
-5. Twitter sentiment analysis will be added
-6. More indexes will be included
+**Neural-Net-with-Financial-Time-Series-Data** is an open source software project for neural network to predict daily log return of any financial asset. The project includes a parsimonious rule-based Model for Sentiment Analysis for the New York Times and serveral technical indicators (ie. Stochastics, Moving Average Convergence/Divergence oscillator) to train a LSTM neural network by stochastic gradient descent with warm restart(SGDR) and cosine annealing. This flexible architecture enables you to deploy with Nvidia CuDNN computation without rewriting code by yourself.  
 
-# Result:
-Lastest LSTM model result for 7 years of testing data that has not been trained:
+
+## Latest Result:
+
+The current LSTM model result for predicting daily log return.
+
+![Alt text](https://github.com/BenjiKCF/Neural-Network-with-Financial-Time-Series-Data/blob/master/Photos/Predicted_vs_True_all_last%20300.png)
+
+
+## Old model Result
+
+This old model uses LSTM to predict stock price.
 
 ![Alt text](https://github.com/BenjiKCF/Neural-Network-with-Financial-Time-Series-Data/blob/master/Photos/20170510result.png)
 
-Train Score: 0.00006 MSE (0.01 RMSE)
 
-Test Score: 0.00029 MSE (0.02 RMSE)
+## LSTM cell 
 
-# Update:
+This is the LSTM cell we used in the model.
+
+![Alt text](https://github.com/BenjiKCF/Neural-Network-with-Financial-Time-Series-Data/blob/master/Photos/lstm.png)
+
+It is **faster** than normal LSTM cell because of the implementation of CuDNN LSTM and batch normalization in the model.
+
+## Stochastic Gradient descent with restart (SGDR)
+
+![](https://github.com/BenjiKCF/Neural-Network-with-Financial-Time-Series-Data/blob/master/Photos/SGDR.png)
+
+The figure is from the paper snapshot ensembles, which uses each iteration as a new ensemble model.
+
+## Update:
 26/03/2017 First update
 1. Recurrent neural network with LSTM is added to the code. 
 2. Keras with tensorflow is also implemented. 
@@ -85,29 +79,50 @@ Test Score: 0.00029 MSE (0.02 RMSE)
 5. A Quandl api key is provided temporarily for those who do not own a quandl account
 6. Moving averages have been added
 
-02/10/2017 Nineth update (Big update)
+02/10/2017 Nineth update
 
 ![Alt text](https://github.com/BenjiKCF/Neural-Network-with-Financial-Time-Series-Data/blob/master/Photos/Dataframe.png)
 
 1. Event driven analysis
 2. Switched to Tensorflow LSTM model
 
-# Future update
-I have successfully applied technical Indicators (ie Stochastics Oscillator, MACD, ATR) to the model. I will combine it with the event driven one to create a larger model with better hyperparameter optimization.
+25/06/2018 Tenth update 
+1. Complete rewrite of News downloader, removed Newsapi in order to get full access to NYTImes data for free
+2. Moving Average Convergence/Divergence oscillator (MACD), Stochastic Oscillator, Average True Range are added to train the model.
+3. log return is now used as target variable. 
+4. Keras on top of Tensorflow is used.
+5. Randomized Search from SKLearn is used for optimization.
 
-# Drawback  
-Currently, the evaluation metrics is using mean square error. It is not appropriate because the price difference is pretty similar to previous day. I will change it to a classification model soon.
+11/10/2018 Eleventh update
+Serveral state of the art techniques are applied
+1. CuDNN LSTM is used to accelerate training
+2. Stochastic gradient descent with warm restart
+3. Cosine annealing 
+4. Neat splitting method
+5. Dataset is provided 
+6. HDF files are used to accelerate reading time
 
-# How to use Quandl
-With this link, you should be able to get the historic price data of a particular stock after login. 
+## Future update
+1. Bayesian search will be used to optmize hyperparameters.
+2. Deep Feature Synthesis will be used for auto feature engineering.
+3. Quantopian zipline will be used for backtesting the model.
+
+
+## How to use Quandl
+If you want to train your neural network on more data, feel free to load the data directly from Quandl.
+You should be able to get the historic price data of a particular stock after login. 
 Use Export > Python > api key and insert the api key to your model.
-https://www.quandl.com/product/WIKIP/WIKI/PRICES-Quandl-End-Of-Day-Stocks-Info
+https://www.quandl.com/databases/WIKIP
 ![Alt text](https://github.com/BenjiKCF/Neural-Network-with-Financial-Time-Series-Data/blob/master/Photos/quandl.png)
 
-# References:
+## References:
 Bernal, A., Fok, S., & Pidaparthi, R. (2012). Financial Market Time Series Prediction with Recurrent Neural Networks.
 
 Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015). Time series analysis: forecasting and control. John Wiley & Sons.
+
+Gu, J., Wang, Z., Kuen, J., Ma, L., Shahroudy, A., Shuai, B., ... & Cai, J. (2015). Recent advances in convolutional neural networks. arXiv preprint arXiv:1512.07108.
+
+Hutto, C.J. & Gilbert, E.E. (2014). VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text. Eighth International Conference on Weblogs and Social Media (ICWSM-14). Ann Arbor, MI, June 2014.
 
 Jaeger, H. (2001). The “echo state” approach to analysing and training recurrent neural networks-with an erratum note. Bonn, Germany: German National Research Center for Information Technology GMD Technical Report, 148(34), 13.
 
